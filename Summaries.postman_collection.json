@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "8485ec56-27f8-4c37-b987-e642928e3961",
+		"name": "Summaries",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25809818"
+	},
+	"item": [
+		{
+			"name": "Returns a list of summaries sorted by date of last update.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/summaries?fromDateTime=2022-04-01T00:00:00Z&toDateTime=2022-04-03T00:00:00Z&sort=updateDate+asc",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"summaries"
+					],
+					"query": [
+						{
+							"key": "fromDateTime",
+							"value": "2022-04-01T00:00:00Z"
+						},
+						{
+							"key": "toDateTime",
+							"value": "2022-04-03T00:00:00Z"
+						},
+						{
+							"key": "sort",
+							"value": "updateDate+asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of summaries filtered by congress, sorted by date of last update.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/summaries/117?fromDateTime=2022-04-01T00:00:00Z&toDateTime=2022-04-03T00:00:00Z&sort=updateDate+desc",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"summaries",
+						"117"
+					],
+					"query": [
+						{
+							"key": "fromDateTime",
+							"value": "2022-04-01T00:00:00Z"
+						},
+						{
+							"key": "toDateTime",
+							"value": "2022-04-03T00:00:00Z"
+						},
+						{
+							"key": "sort",
+							"value": "updateDate+desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of summaries filtered by congress and by bill type, sorted by date of last update.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/summaries/117/hr?fromDateTime=2022-04-01T00:00:00Z&toDateTime=2022-04-03T00:00:00Z&sort=updateDate+desc",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"summaries",
+						"117",
+						"hr"
+					],
+					"query": [
+						{
+							"key": "fromDateTime",
+							"value": "2022-04-01T00:00:00Z"
+						},
+						{
+							"key": "toDateTime",
+							"value": "2022-04-03T00:00:00Z"
+						},
+						{
+							"key": "sort",
+							"value": "updateDate+desc"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

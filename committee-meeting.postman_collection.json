@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "bbf3119f-c54e-44fd-b990-b37911e11508",
+		"name": "committee-meeting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25809818"
+	},
+	"item": [
+		{
+			"name": "Returns a list of committee meetings.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee-meeting",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee-meeting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of committee meetings filtered by the specified congress",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee-meeting/118",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee-meeting",
+						"118"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of committee meetings filtered by the specified congress and chamber.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee-meeting/118/house",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee-meeting",
+						"118",
+						"house"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns detailed information for a specified committee meeting.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee-meeting/118/house/115538",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee-meeting",
+						"118",
+						"house",
+						"115538"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

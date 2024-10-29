@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "49fa113f-c907-46c0-b808-1778f75f4e9f",
+		"name": "hearing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25809818"
+	},
+	"item": [
+		{
+			"name": "Returns a list of hearings",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/hearing",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"hearing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of hearings filtered by the specified congress",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/hearing/116",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"hearing",
+						"116"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of hearings filtered by the specified congress and chamber",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/hearing/116/house",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"hearing",
+						"116",
+						"house"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns detailed information for a specified hearing.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/hearing/116/house/41365",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"hearing",
+						"116",
+						"house",
+						"41365"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

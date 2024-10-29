@@ -1,0 +1,410 @@
+{
+	"info": {
+		"_postman_id": "3ab0000c-1501-4a95-ab57-8ee606d71d4a",
+		"name": "memberData",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25809818"
+	},
+	"item": [
+		{
+			"name": "Returns a list of congressional members.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the initial response",
+							"let responseData = pm.response.json();",
+							"let pagination = responseData.pagination;",
+							"",
+							"// Get total records count from the pagination",
+							"let totalRecords = pagination.count;",
+							"let limit = pm.environment.get(\"limit\");",
+							"let offset = pm.environment.get(\"offset\");",
+							"",
+							"// Initialize a variable to store the lowest startYear (if not already set)",
+							"if (!pm.collectionVariables.has(\"lowestStartYear\")) {",
+							"    pm.collectionVariables.set(\"lowestStartYear\", Number.MAX_SAFE_INTEGER);",
+							"}",
+							"",
+							"// Function to fetch data and process members",
+							"function fetchMoreData(newOffset) {",
+							"    pm.sendRequest({",
+							"        url: `https://api.congress.gov/v3/member?offset=${newOffset}&limit=${limit}&api_key=${pm.environment.get('api_key')}`, // Use 'api_key'",
+							"        method: 'GET',",
+							"    }, (err, res) => {",
+							"        if (err) {",
+							"            console.error(\"Error fetching additional data:\", err);",
+							"            return;",
+							"        }",
+							"",
+							"        let additionalResponseData = res.json();",
+							"        ",
+							"        // Loop through the 'members' data and find the lowest start year from each page",
+							"        additionalResponseData.members.forEach(member => {",
+							"            if (member.terms && member.terms.item[0] && member.terms.item[0].startYear) {",
+							"                let startYear = member.terms.item[0].startYear;",
+							"                let lowestStartYear = parseInt(pm.collectionVariables.get(\"lowestStartYear\"));",
+							"                ",
+							"                // Update the lowest startYear if a lower one is found",
+							"                if (startYear < lowestStartYear) {",
+							"                    pm.collectionVariables.set(\"lowestStartYear\", startYear);",
+							"                }",
+							"            }",
+							"        });",
+							"",
+							"        // Calculate the next offset",
+							"        let nextOffset = parseInt(newOffset) + parseInt(limit);",
+							"        ",
+							"        // **Store the updated offset in the environment**",
+							"        pm.environment.set(\"offset\", nextOffset);",
+							"        ",
+							"        // If more records are left, continue fetching",
+							"        if (nextOffset < totalRecords) {",
+							"            fetchMoreData(nextOffset);",
+							"        } else {",
+							"            // All records have been fetched",
+							"            let finalLowestStartYear = pm.collectionVariables.get(\"lowestStartYear\");",
+							"            console.log(\"All records fetched. Lowest start year: \" + finalLowestStartYear);",
+							"",
+							"            // Clear the offset and collection variable for the next run",
+							"            pm.environment.unset(\"offset\");",
+							"            pm.collectionVariables.unset(\"lowestStartYear\");",
+							"        }",
+							"    });",
+							"}",
+							"",
+							"// Process initial members to find the lowest start year",
+							"responseData.members.forEach(member => {",
+							"    if (member.terms && member.terms.item[0] && member.terms.item[0].startYear) {",
+							"        let startYear = member.terms.item[0].startYear;",
+							"        let lowestStartYear = parseInt(pm.collectionVariables.get(\"lowestStartYear\"));",
+							"        ",
+							"        if (startYear < lowestStartYear) {",
+							"            pm.collectionVariables.set(\"lowestStartYear\", startYear);",
+							"        }",
+							"    }",
+							"});",
+							"",
+							"let finalValue=0;",
+							"",
+							"// Calculate the next offset",
+							"let newOffset = parseInt(offset) + parseInt(limit);",
+							"",
+							"// **Store the updated offset in the environment**",
+							"pm.environment.set(\"offset\", newOffset);",
+							"",
+							"// Check if there are more records to fetch",
+							"if (newOffset < totalRecords) {",
+							"    // Fetch the next page using direct request",
+							"    fetchMoreData(newOffset);",
+							"} else {",
+							"    // If all records have been fetched from the first response",
+							"    let finalLowestStartYear = pm.collectionVariables.get(\"lowestStartYear\");",
+							"    pm.environment.set(\"finalLowestStartYear\", finalLowestStartYear);",
+							"    console.log(\"All records fetched. Lowest start year: \" + finalLowestStartYear);",
+							"        pm.collectionVariables.set(\"val\",newOffset);",
+							"    // Clear the offset and collection variable",
+							"   // pm.environment.unset(\"offset\");",
+							"    //pm.collectionVariables.unset(\"lowestStartYear\");",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Initialize 'limit' and 'offset' if not already set",
+							"if (!pm.environment.has(\"limit\")) {",
+							"    pm.environment.set(\"limit\", 249); // Set the limit (number of records per request)",
+							"}",
+							"",
+							"if (!pm.environment.has(\"offset\")) {",
+							"    pm.environment.set(\"offset\", 0); // Start with the first page",
+							"}",
+							"",
+							"// Initialize the API key if it's not set",
+							"if (!pm.environment.has(\"api_key\")) {",
+							"    pm.environment.set(\"api_key\", \"XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz\"); // Replace with your actual API key",
+							"}",
+							"",
+							"// Initialize the collection variable 'lowestStartYear' to the maximum possible integer value",
+							"if (!pm.collectionVariables.has(\"lowestStartYear\")) {",
+							"    pm.collectionVariables.set(\"lowestStartYear\", Number.MAX_SAFE_INTEGER);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/member?offset=0&limit=249&api_key=XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "currentMember",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "249"
+						},
+						{
+							"key": "format",
+							"value": "json",
+							"disabled": true
+						},
+						{
+							"key": "fromDateTime",
+							"value": "2022-12-16T21:56:51Z",
+							"disabled": true
+						},
+						{
+							"key": "toDateTime",
+							"value": "2024-12-16T21:56:51Z",
+							"disabled": true
+						},
+						{
+							"key": "api_key",
+							"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz"
+						}
+					]
+				},
+				"description": "This endpoint retrieves member information from the Congress API. The request includes parameters for offset and limit to handle pagination. The response contains an array of member objects, along with pagination details.\n\nTo handle pagination more efficiently, you can modify the code to capture the \"next\" value from the response and use it to make subsequent requests for the next set of results. Additionally, you can iterate through the \"terms\" array within each member object to find the lowest \"startYear\" value.\n\nHere's a sample pseudocode to achieve this:\n\n``` javascript\n// Make initial request\nlet nextUrl = 'https://api.congress.gov/v3/member?offset=0&limit=249&api_key=XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz';\n// Function to handle pagination\nfunction handlePagination(url) {\n    // Make request using the provided URL\n    // Capture the \"next\" value from the response\n    // If \"next\" is not empty, make another request using the \"next\" URL\n    // Repeat the process until \"next\" is empty\n    // Example of iterating through the \"terms\" array to find the lowest \"startYear\"\n    // Iterate through each member object in the response\n    // Iterate through the \"terms\" array within each member object\n    // Track the lowest \"startYear\" value encountered\n}\n// Call the function with the initial URL\nhandlePagination(nextUrl);\n\n ```\n\nTo simplify the code and set the 'finalOffset' variable, you can extract the 'offset' value from the response and assign it to the 'finalOffset' variable. Then, ensure that the 'finalOffset' variable is added to the collection variables for future use.\n\nThe response returns a status code of 200 and a JSON object containing an array of member objects, as well as pagination information and details about the request.\n\nTo ensure that the variable 'finalOffset' is being set correctly and added to the collection variables, the script should be checked to confirm that the value of 'finalOffset' is accurately assigned and stored in the collection variables for future use."
+			},
+			"response": []
+		},
+		{
+			"name": "GetEntireJSON_DataIn_A_File",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the initial response",
+							"let responseData = pm.response.json();",
+							"let pagination = responseData.pagination;",
+							"",
+							"// Get total records count from the pagination",
+							"let totalRecords = pagination.count;",
+							"let limit = pm.environment.get(\"limit\");",
+							"let offset = pm.environment.get(\"offset\");",
+							"",
+							"// Initialize the allMembers array if it hasn't been initialized",
+							"if (!pm.environment.has(\"allMembers\")) {",
+							"    pm.environment.set(\"allMembers\", JSON.stringify([])); // Initialize an empty array as a JSON string",
+							"}",
+							"",
+							"// Function to fetch data and process members",
+							"function fetchMoreData(newOffset) {",
+							"    pm.sendRequest({",
+							"        url: `https://api.congress.gov/v3/member?offset=${newOffset}&limit=${limit}&api_key=${pm.environment.get('api_key')}`,",
+							"        method: 'GET',",
+							"    }, (err, res) => {",
+							"        if (err) {",
+							"            console.error(\"Error fetching additional data:\", err);",
+							"            return;",
+							"        }",
+							"",
+							"        let additionalResponseData = res.json();",
+							"        let allMembers = JSON.parse(pm.environment.get(\"allMembers\")); // Parse the current array",
+							"",
+							"        // Append all members from the current page to the allMembers array",
+							"        allMembers.push(...additionalResponseData.members);",
+							"",
+							"        // Store the updated allMembers array back to the environment variable",
+							"        pm.environment.set(\"allMembers\", JSON.stringify(allMembers));",
+							"",
+							"        // Calculate the next offset",
+							"        let nextOffset = parseInt(newOffset) + parseInt(limit);",
+							"        pm.environment.set(\"offset\", nextOffset);",
+							"",
+							"        // Continue fetching if more records are available",
+							"        if (nextOffset < totalRecords) {",
+							"            fetchMoreData(nextOffset);",
+							"        } else {",
+							"            console.log(\"All records fetched. Total members stored: \" + allMembers.length);",
+							"",
+							"            // Clear the offset variable",
+							"            pm.environment.unset(\"offset\");",
+							"        }",
+							"    });",
+							"}",
+							"",
+							"// Process initial members and store them in the allMembers array",
+							"let allMembers = JSON.parse(pm.environment.get(\"allMembers\"));",
+							"allMembers.push(...responseData.members);",
+							"",
+							"// Update the environment variable with the current allMembers array",
+							"pm.environment.set(\"allMembers\", JSON.stringify(allMembers));",
+							"",
+							"// Calculate the next offset",
+							"let newOffset = parseInt(offset) + parseInt(limit);",
+							"pm.environment.set(\"offset\", newOffset);",
+							"",
+							"if (newOffset < totalRecords) {",
+							"    fetchMoreData(newOffset);",
+							"} else {",
+							"    console.log(\"All records fetched. Total members stored: \" + allMembers.length);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Initialize 'limit' and 'offset' if not already set",
+							"if (!pm.environment.has(\"limit\")) {",
+							"    pm.environment.set(\"limit\", 249); // Set the limit (number of records per request)",
+							"}",
+							"",
+							"if (!pm.environment.has(\"offset\")) {",
+							"    pm.environment.set(\"offset\", 0); // Start with the first page",
+							"}",
+							"",
+							"// Initialize the API key if it's not set",
+							"if (!pm.environment.has(\"api_key\")) {",
+							"    pm.environment.set(\"api_key\", \"XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz\"); // Replace with your actual API key",
+							"}",
+							"",
+							"// Initialize the collection variable 'lowestStartYear' to the maximum possible integer value",
+							"if (!pm.collectionVariables.has(\"lowestStartYear\")) {",
+							"    pm.collectionVariables.set(\"lowestStartYear\", Number.MAX_SAFE_INTEGER);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/member?offset=0&limit=249&api_key=XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "currentMember",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "249"
+						},
+						{
+							"key": "format",
+							"value": "json",
+							"disabled": true
+						},
+						{
+							"key": "fromDateTime",
+							"value": "2022-12-16T21:56:51Z",
+							"disabled": true
+						},
+						{
+							"key": "toDateTime",
+							"value": "2024-12-16T21:56:51Z",
+							"disabled": true
+						},
+						{
+							"key": "api_key",
+							"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz"
+						}
+					]
+				},
+				"description": "This endpoint retrieves member information from the Congress API. The request includes parameters for offset and limit to handle pagination. The response contains an array of member objects, along with pagination details.\n\nTo handle pagination more efficiently, you can modify the code to capture the \"next\" value from the response and use it to make subsequent requests for the next set of results. Additionally, you can iterate through the \"terms\" array within each member object to find the lowest \"startYear\" value.\n\nHere's a sample pseudocode to achieve this:\n\n``` javascript\n// Make initial request\nlet nextUrl = 'https://api.congress.gov/v3/member?offset=0&limit=249&api_key=XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz';\n// Function to handle pagination\nfunction handlePagination(url) {\n    // Make request using the provided URL\n    // Capture the \"next\" value from the response\n    // If \"next\" is not empty, make another request using the \"next\" URL\n    // Repeat the process until \"next\" is empty\n    // Example of iterating through the \"terms\" array to find the lowest \"startYear\"\n    // Iterate through each member object in the response\n    // Iterate through the \"terms\" array within each member object\n    // Track the lowest \"startYear\" value encountered\n}\n// Call the function with the initial URL\nhandlePagination(nextUrl);\n\n ```\n\nTo simplify the code and set the 'finalOffset' variable, you can extract the 'offset' value from the response and assign it to the 'finalOffset' variable. Then, ensure that the 'finalOffset' variable is added to the collection variables for future use.\n\nThe response returns a status code of 200 and a JSON object containing an array of member objects, as well as pagination information and details about the request.\n\nTo ensure that the variable 'finalOffset' is being set correctly and added to the collection variables, the script should be checked to confirm that the value of 'finalOffset' is accurately assigned and stored in the collection variables for future use."
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "val",
+			"value": "0",
+			"type": "string"
+		},
+		{
+			"key": "lowestStartYear",
+			"value": ""
+		}
+	]
+}

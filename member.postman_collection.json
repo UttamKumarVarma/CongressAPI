@@ -1,0 +1,784 @@
+{
+	"info": {
+		"_postman_id": "c4e52d8b-d114-4595-bb9f-97317ba1f6e8",
+		"name": "member",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25809818"
+	},
+	"item": [
+		{
+			"name": "Returns a list of congressional members.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the initial response",
+							"let responseData = pm.response.json();",
+							"let pagination = responseData.pagination;",
+							"",
+							"// Get total records count from the pagination",
+							"let totalRecords = pagination.count;",
+							"let limit = pm.environment.get(\"limit\");",
+							"let offset = pm.environment.get(\"offset\");",
+							"",
+							"// Initialize a variable to store the lowest startYear (if not already set)",
+							"if (!pm.collectionVariables.has(\"lowestStartYear\")) {",
+							"    pm.collectionVariables.set(\"lowestStartYear\", Number.MAX_SAFE_INTEGER);",
+							"}",
+							"",
+							"// Function to fetch data and process members",
+							"function fetchMoreData(newOffset) {",
+							"    pm.sendRequest({",
+							"        url: `https://api.congress.gov/v3/member?offset=${newOffset}&limit=${limit}&api_key=${pm.environment.get('api_key')}`, // Use 'api_key'",
+							"        method: 'GET',",
+							"    }, (err, res) => {",
+							"        if (err) {",
+							"            console.error(\"Error fetching additional data:\", err);",
+							"            return;",
+							"        }",
+							"",
+							"        let additionalResponseData = res.json();",
+							"        ",
+							"        // Loop through the 'members' data and find the lowest start year from each page",
+							"        additionalResponseData.members.forEach(member => {",
+							"            if (member.terms && member.terms.item[0] && member.terms.item[0].startYear) {",
+							"                let startYear = member.terms.item[0].startYear;",
+							"                let lowestStartYear = parseInt(pm.collectionVariables.get(\"lowestStartYear\"));",
+							"                ",
+							"                // Update the lowest startYear if a lower one is found",
+							"                if (startYear < lowestStartYear) {",
+							"                    pm.collectionVariables.set(\"lowestStartYear\", startYear);",
+							"                }",
+							"            }",
+							"        });",
+							"",
+							"        // Calculate the next offset",
+							"        let nextOffset = parseInt(newOffset) + parseInt(limit);",
+							"        ",
+							"        // **Store the updated offset in the environment**",
+							"        pm.environment.set(\"offset\", nextOffset);",
+							"        ",
+							"        // If more records are left, continue fetching",
+							"        if (nextOffset < totalRecords) {",
+							"            fetchMoreData(nextOffset);",
+							"        } else {",
+							"            // All records have been fetched",
+							"            let finalLowestStartYear = pm.collectionVariables.get(\"lowestStartYear\");",
+							"            console.log(\"All records fetched. Lowest start year: \" + finalLowestStartYear);",
+							"",
+							"            // Clear the offset and collection variable for the next run",
+							"            pm.environment.unset(\"offset\");",
+							"            pm.collectionVariables.unset(\"lowestStartYear\");",
+							"        }",
+							"    });",
+							"}",
+							"",
+							"// Process initial members to find the lowest start year",
+							"responseData.members.forEach(member => {",
+							"    if (member.terms && member.terms.item[0] && member.terms.item[0].startYear) {",
+							"        let startYear = member.terms.item[0].startYear;",
+							"        let lowestStartYear = parseInt(pm.collectionVariables.get(\"lowestStartYear\"));",
+							"        ",
+							"        if (startYear < lowestStartYear) {",
+							"            pm.collectionVariables.set(\"lowestStartYear\", startYear);",
+							"        }",
+							"    }",
+							"});",
+							"",
+							"// Calculate the next offset",
+							"let newOffset = parseInt(offset) + parseInt(limit);",
+							"",
+							"// **Store the updated offset in the environment**",
+							"pm.environment.set(\"offset\", newOffset);",
+							"",
+							"// Check if there are more records to fetch",
+							"if (newOffset < totalRecords) {",
+							"    // Fetch the next page using direct request",
+							"    fetchMoreData(newOffset);",
+							"} else {",
+							"    // If all records have been fetched from the first response",
+							"    let finalLowestStartYear = pm.collectionVariables.get(\"lowestStartYear\");",
+							"    console.log(\"All records fetched. Lowest start year: \" + finalLowestStartYear);",
+							"        pm.collectionVariables.set(\"val\",newOffset);",
+							"    // Clear the offset and collection variable",
+							"   // pm.environment.unset(\"offset\");",
+							"    //pm.collectionVariables.unset(\"lowestStartYear\");",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Initialize 'limit' and 'offset' if not already set",
+							"if (!pm.environment.has(\"limit\")) {",
+							"    pm.environment.set(\"limit\", 249); // Set the limit (number of records per request)",
+							"}",
+							"",
+							"if (!pm.environment.has(\"offset\")) {",
+							"    pm.environment.set(\"offset\", 0); // Start with the first page",
+							"}",
+							"",
+							"// Initialize the API key if it's not set",
+							"if (!pm.environment.has(\"api_key\")) {",
+							"    pm.environment.set(\"api_key\", \"XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz\"); // Replace with your actual API key",
+							"}",
+							"",
+							"// Initialize the collection variable 'lowestStartYear' to the maximum possible integer value",
+							"if (!pm.collectionVariables.has(\"lowestStartYear\")) {",
+							"    pm.collectionVariables.set(\"lowestStartYear\", Number.MAX_SAFE_INTEGER);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://api.congress.gov/v3/member?fromDateTime=2022-12-16T21:56:51Z&toDateTime=2023-12-16T21:56:51Z&api_key=XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "currentMember",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "249",
+							"disabled": true
+						},
+						{
+							"key": "format",
+							"value": "json",
+							"disabled": true
+						},
+						{
+							"key": "fromDateTime",
+							"value": "2022-12-16T21:56:51Z"
+						},
+						{
+							"key": "toDateTime",
+							"value": "2023-12-16T21:56:51Z"
+						},
+						{
+							"key": "api_key",
+							"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz"
+						}
+					]
+				},
+				"description": "This endpoint retrieves member information from the Congress API. The request includes parameters for offset and limit to handle pagination. The response contains an array of member objects, along with pagination details.\n\nTo handle pagination more efficiently, you can modify the code to capture the \"next\" value from the response and use it to make subsequent requests for the next set of results. Additionally, you can iterate through the \"terms\" array within each member object to find the lowest \"startYear\" value.\n\nHere's a sample pseudocode to achieve this:\n\n``` javascript\n// Make initial request\nlet nextUrl = 'https://api.congress.gov/v3/member?offset=0&limit=249&api_key=XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz';\n// Function to handle pagination\nfunction handlePagination(url) {\n    // Make request using the provided URL\n    // Capture the \"next\" value from the response\n    // If \"next\" is not empty, make another request using the \"next\" URL\n    // Repeat the process until \"next\" is empty\n    // Example of iterating through the \"terms\" array to find the lowest \"startYear\"\n    // Iterate through each member object in the response\n    // Iterate through the \"terms\" array within each member object\n    // Track the lowest \"startYear\" value encountered\n}\n// Call the function with the initial URL\nhandlePagination(nextUrl);\n\n ```\n\nTo simplify the code and set the 'finalOffset' variable, you can extract the 'offset' value from the response and assign it to the 'finalOffset' variable. Then, ensure that the 'finalOffset' variable is added to the collection variables for future use.\n\nThe response returns a status code of 200 and a JSON object containing an array of member objects, as well as pagination information and details about the request.\n\nTo ensure that the variable 'finalOffset' is being set correctly and added to the collection variables, the script should be checked to confirm that the value of 'finalOffset' is accurately assigned and stored in the collection variables for future use."
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of congressional members. Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response JSON",
+							"let responseData = pm.response.json();",
+							"",
+							"// Define your date range",
+							"let fromDate = new Date(\"2022-12-16T21:56:51Z\");",
+							"let toDate = new Date(\"2023-12-16T21:56:51Z\");",
+							"",
+							"// Initialize a flag to track if any records fall outside the range",
+							"let isValid = true;",
+							"",
+							"// Loop through each member in the response",
+							"responseData.members.forEach(member => {",
+							"    // Parse the updateDate of the member",
+							"    let updateDate = new Date(member.updateDate);",
+							"    ",
+							"    // Check if updateDate is within the specified range",
+							"    if (updateDate < fromDate || updateDate > toDate) {",
+							"        console.log(`Member ${member.name} with updateDate ${member.updateDate} is out of range.`);",
+							"        isValid = false; // Set flag to false if any record is out of range",
+							"    } else {",
+							"        console.log(`Member ${member.name} with updateDate ${member.updateDate} is within range.`);",
+							"    }",
+							"});",
+							"",
+							"// Set a Postman test result based on the validity",
+							"pm.test(\"All members' updateDate are within the specified range.\", function () {",
+							"    pm.expect(isValid).to.be.true;",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"// Parse the initial response",
+							"let responseData = pm.response.json();",
+							"let pagination = responseData.pagination;",
+							"",
+							"// Get total records count from the pagination",
+							"let totalRecords = pagination.count;",
+							"let limit = pm.environment.get(\"limit\");",
+							"let offset = pm.environment.get(\"offset\");",
+							"",
+							"// Initialize a variable to store the lowest startYear (if not already set)",
+							"if (!pm.collectionVariables.has(\"lowestStartYear\")) {",
+							"    pm.collectionVariables.set(\"lowestStartYear\", Number.MAX_SAFE_INTEGER);",
+							"}",
+							"",
+							"// Function to fetch data and process members",
+							"function fetchMoreData(newOffset) {",
+							"    pm.sendRequest({",
+							"        url: `https://api.congress.gov/v3/member?offset=${newOffset}&limit=${limit}&api_key=${pm.environment.get('api_key')}`, // Use 'api_key'",
+							"        method: 'GET',",
+							"    }, (err, res) => {",
+							"        if (err) {",
+							"            console.error(\"Error fetching additional data:\", err);",
+							"            return;",
+							"        }",
+							"",
+							"        let additionalResponseData = res.json();",
+							"        ",
+							"        // Loop through the 'members' data and find the lowest start year from each page",
+							"        additionalResponseData.members.forEach(member => {",
+							"             let updateDate = new Date(member.updateDate);",
+							"    ",
+							"    // Check if updateDate is within the specified range",
+							"    if (updateDate < fromDate || updateDate > toDate) {",
+							"        console.log(`Member ${member.name} with updateDate ${member.updateDate} is out of range.`);",
+							"        isValid = false; // Set flag to false if any record is out of range",
+							"    } else {",
+							"        console.log(`Member ${member.name} with updateDate ${member.updateDate} is within range.`);",
+							"    }",
+							"        });",
+							"",
+							"        // Calculate the next offset",
+							"        let nextOffset = parseInt(newOffset) + parseInt(limit);",
+							"        ",
+							"        // **Store the updated offset in the environment**",
+							"        pm.environment.set(\"offset\", nextOffset);",
+							"        ",
+							"        // If more records are left, continue fetching",
+							"        if (nextOffset < totalRecords) {",
+							"            fetchMoreData(nextOffset);",
+							"        } else {",
+							"            console.log(\"All records fetched. Lowest start year: \" );",
+							"",
+							"            // Clear the offset and collection variable for the next run",
+							"            pm.environment.unset(\"offset\");",
+							"            pm.collectionVariables.unset(\"lowestStartYear\");",
+							"        }",
+							"    });",
+							"}",
+							"",
+							"",
+							"",
+							"// Calculate the next offset",
+							"let newOffset = parseInt(offset) + parseInt(limit);",
+							"",
+							"// **Store the updated offset in the environment**",
+							"pm.environment.set(\"offset\", newOffset);",
+							"",
+							"// Check if there are more records to fetch",
+							"if (newOffset < totalRecords) {",
+							"    // Fetch the next page using direct request",
+							"    fetchMoreData(newOffset);",
+							"} else {",
+							"    console.log(\"All records fetched. Lowest start year: \" );",
+							"        pm.collectionVariables.set(\"val\",newOffset);",
+							"    // Clear the offset and collection variable",
+							"   // pm.environment.unset(\"offset\");",
+							"    //pm.collectionVariables.unset(\"lowestStartYear\");",
+							"}",
+							"",
+							" ",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Initialize 'limit' and 'offset' if not already set",
+							"if (!pm.environment.has(\"limit\")) {",
+							"    pm.environment.set(\"limit\", 249); // Set the limit (number of records per request)",
+							"}",
+							"",
+							"if (!pm.environment.has(\"offset\")) {",
+							"    pm.environment.set(\"offset\", 0); // Start with the first page",
+							"}",
+							"",
+							"// Initialize the API key if it's not set",
+							"if (!pm.environment.has(\"api_key\")) {",
+							"    pm.environment.set(\"api_key\", \"XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz\"); // Replace with your actual API key",
+							"}",
+							"",
+							"// Initialize the collection variable 'lowestStartYear' to the maximum possible integer value",
+							"if (!pm.collectionVariables.has(\"lowestStartYear\")) {",
+							"    pm.collectionVariables.set(\"lowestStartYear\", Number.MAX_SAFE_INTEGER);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://api.congress.gov/v3/member?fromDateTime=2020-12-16T21:56:51Z&toDateTime=2024-12-16T21:56:51Z&api_key=XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "currentMember",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "249",
+							"disabled": true
+						},
+						{
+							"key": "format",
+							"value": "json",
+							"disabled": true
+						},
+						{
+							"key": "fromDateTime",
+							"value": "2020-12-16T21:56:51Z"
+						},
+						{
+							"key": "toDateTime",
+							"value": "2024-12-16T21:56:51Z"
+						},
+						{
+							"key": "api_key",
+							"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz"
+						}
+					]
+				},
+				"description": "This endpoint retrieves member information from the Congress API. The request includes parameters for offset and limit to handle pagination. The response contains an array of member objects, along with pagination details.\n\nTo handle pagination more efficiently, you can modify the code to capture the \"next\" value from the response and use it to make subsequent requests for the next set of results. Additionally, you can iterate through the \"terms\" array within each member object to find the lowest \"startYear\" value.\n\nHere's a sample pseudocode to achieve this:\n\n``` javascript\n// Make initial request\nlet nextUrl = 'https://api.congress.gov/v3/member?offset=0&limit=249&api_key=XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz';\n// Function to handle pagination\nfunction handlePagination(url) {\n    // Make request using the provided URL\n    // Capture the \"next\" value from the response\n    // If \"next\" is not empty, make another request using the \"next\" URL\n    // Repeat the process until \"next\" is empty\n    // Example of iterating through the \"terms\" array to find the lowest \"startYear\"\n    // Iterate through each member object in the response\n    // Iterate through the \"terms\" array within each member object\n    // Track the lowest \"startYear\" value encountered\n}\n// Call the function with the initial URL\nhandlePagination(nextUrl);\n\n ```\n\nTo simplify the code and set the 'finalOffset' variable, you can extract the 'offset' value from the response and assign it to the 'finalOffset' variable. Then, ensure that the 'finalOffset' variable is added to the collection variables for future use.\n\nThe response returns a status code of 200 and a JSON object containing an array of member objects, as well as pagination information and details about the request.\n\nTo ensure that the variable 'finalOffset' is being set correctly and added to the collection variables, the script should be checked to confirm that the value of 'finalOffset' is accurately assigned and stored in the collection variables for future use."
+			},
+			"response": []
+		},
+		{
+			"name": "Returns detailed information for a specified congressional member.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/member/L000174",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member",
+						"L000174"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of legislation sponsored by a specified congressional member.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/member/L000174/sponsored-legislation",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member",
+						"L000174",
+						"sponsored-legislation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of legislation cosponsored by a specified congressional member.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/member/L000174/cosponsored-legislation",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member",
+						"L000174",
+						"cosponsored-legislation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of members specified by Congress",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.congress.gov/v3/member/congress/72",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member",
+						"congress",
+						"72"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "xml",
+							"disabled": true
+						},
+						{
+							"key": "offset",
+							"value": "460",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "250",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of members filtered by state.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"All members have state 'New Jersey'\", () => {",
+							"",
+							"    var jsonData = pm.response.json();",
+							"",
+							"    // Loop through each member to check if the state is \"New Jersey\"",
+							"    jsonData.members.forEach(member => {",
+							"        pm.expect(member.state).to.eql(\"New Jersey\");",
+							"    });",
+							"",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/member/nj",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member",
+						"nj"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of members filtered by state and district.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"members\": {",
+							"            \"type\": \"array\",",
+							"            \"items\": {",
+							"                \"type\": \"object\",",
+							"                \"properties\": {",
+							"                    \"bioguideId\": { \"type\": \"string\" },",
+							"                    \"depiction\": {",
+							"                        \"type\": \"object\",",
+							"                        \"properties\": {",
+							"                            \"attribution\": { \"type\": \"string\" },",
+							"                            \"imageUrl\": { \"type\": \"string\", \"format\": \"uri\" }",
+							"                        },",
+							"                        \"required\": [\"attribution\", \"imageUrl\"]",
+							"                    },",
+							"                    \"district\": { \"type\": \"integer\" },",
+							"                    \"name\": { \"type\": \"string\" },",
+							"                    \"partyName\": { \"type\": \"string\" },",
+							"                    \"state\": { \"type\": \"string\" },",
+							"                    \"terms\": {",
+							"                        \"type\": \"object\",",
+							"                        \"properties\": {",
+							"                            \"item\": {",
+							"                                \"type\": \"array\",",
+							"                                \"items\": {",
+							"                                    \"type\": \"object\",",
+							"                                    \"properties\": {",
+							"                                        \"chamber\": { \"type\": \"string\" },",
+							"                                        \"startYear\": { \"type\": \"integer\" }",
+							"                                    },",
+							"                                    \"required\": [\"chamber\", \"startYear\"]",
+							"                                }",
+							"                            }",
+							"                        },",
+							"                        \"required\": [\"item\"]",
+							"                    },",
+							"                    \"updateDate\": { \"type\": \"string\", \"format\": \"date-time\" },",
+							"                    \"url\": { \"type\": \"string\", \"format\": \"uri\" }",
+							"                },",
+							"                \"required\": [\"bioguideId\", \"depiction\", \"district\", \"name\", \"partyName\", \"state\", \"terms\", \"updateDate\", \"url\"]",
+							"            }",
+							"        }",
+							"    },",
+							"    \"required\": [\"members\"]",
+							"};",
+							"const responseJson = pm.response.json();",
+							"// Add a test to check if the response JSON is valid according to the specified schema",
+							"pm.test(\"Response JSON is valid according to the specified schema\", function () {",
+							"    // Check if the response JSON matches the expected schema",
+							"    pm.expect(tv4.validate(responseJson, schema)).to.be.true;",
+							"});",
+							"",
+							"// Process initial members to find the lowest start year",
+							"responseJson.members.forEach(member => {",
+							"    if (member.district !== 10) {",
+							"        pm.expect.fail(member.district+\"----> this district value is not equal to 10\");",
+							"    }",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"Before request\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/member/MI/10?api_key=XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member",
+						"MI",
+						"10"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of members filtered by congress, state and district.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/member/congress/118/MI/10",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"member",
+						"congress",
+						"118",
+						"MI",
+						"10"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "val",
+			"value": "0",
+			"type": "string"
+		},
+		{
+			"key": "lowestStartYear",
+			"value": ""
+		},
+		{
+			"key": "offset",
+			"value": ""
+		}
+	]
+}

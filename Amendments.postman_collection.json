@@ -1,0 +1,248 @@
+{
+	"info": {
+		"_postman_id": "54366136-4b51-41d3-9247-ab7c13cb2d37",
+		"name": "Amendments",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25809818"
+	},
+	"item": [
+		{
+			"name": "Returns a list of amendments sorted by date of latest action.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/amendment",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"amendment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of amendments filtered by the specified congress, sorted by date of latest action.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/amendment/117",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"amendment",
+						"117"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of amendments filtered by the specified congress and amendment type, sorted by date of latest action.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/amendment/117/samdt",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"amendment",
+						"117",
+						"samdt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns detailed information for a specified amendment.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/amendment/117/samdt/2137?api_key=[INSERT_KEY]",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"amendment",
+						"117",
+						"samdt",
+						"2137"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "[INSERT_KEY]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of actions on a specified amendment.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/amendment/117/samdt/2137/actions",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"amendment",
+						"117",
+						"samdt",
+						"2137",
+						"actions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of cosponsors on a specified amendment.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/amendment/117/samdt/2137/cosponsors",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"amendment",
+						"117",
+						"samdt",
+						"2137",
+						"cosponsors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of amendments to a specified amendment.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/amendment/117/samdt/2137/amendments",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"amendment",
+						"117",
+						"samdt",
+						"2137",
+						"amendments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of text versions for a specified amendment from the 117th Congress onwards.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/amendment/117/hamdt/287/text",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"amendment",
+						"117",
+						"hamdt",
+						"287",
+						"text"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

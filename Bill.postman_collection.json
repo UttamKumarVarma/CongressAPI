@@ -1,0 +1,523 @@
+{
+	"info": {
+		"_postman_id": "cbe3bf36-6c83-49f3-8646-f2ad0c8e05bb",
+		"name": "Bill",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25809818"
+	},
+	"item": [
+		{
+			"name": "Returns a list of bills sorted by date of latest action.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill?limit=5",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of bills filtered by the specified congress, sorted by date of latest action.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117?fromDateTime=2022-08-04T04:02:00Z&toDateTime=2022-09-30T04:03:00Z&sort=updateDate+desc&api_key=[INSERT_KEY]",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117"
+					],
+					"query": [
+						{
+							"key": "fromDateTime",
+							"value": "2022-08-04T04:02:00Z"
+						},
+						{
+							"key": "toDateTime",
+							"value": "2022-09-30T04:03:00Z"
+						},
+						{
+							"key": "sort",
+							"value": "updateDate+desc"
+						},
+						{
+							"key": "api_key",
+							"value": "[INSERT_KEY]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of bills filtered by the specified congress and bill type, sorted by date of latest action.",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Dates chnaged to get the data"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr?fromDateTime=2021-01-01T00:00:00Z&toDateTime=2023-12-31T23:59:59Z&sort=updateDate+asc",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr"
+					],
+					"query": [
+						{
+							"key": "fromDateTime",
+							"value": "2021-01-01T00:00:00Z"
+						},
+						{
+							"key": "toDateTime",
+							"value": "2023-12-31T23:59:59Z"
+						},
+						{
+							"key": "sort",
+							"value": "updateDate+asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of bills filtered by the specified congress and bill type, sorted by date of latest action.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr?fromDateTime=2021-08-04T04:02:00Z&toDateTime=2022-09-30T04:03:00Z&sort=updateDate+asc",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr"
+					],
+					"query": [
+						{
+							"key": "fromDateTime",
+							"value": "2021-08-04T04:02:00Z"
+						},
+						{
+							"key": "toDateTime",
+							"value": "2022-09-30T04:03:00Z"
+						},
+						{
+							"key": "sort",
+							"value": "updateDate+asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns detailed information for a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of actions on a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076/actions",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076",
+						"actions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of amendments to a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076/amendments",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076",
+						"amendments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of committees associated with a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076/committees",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076",
+						"committees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of cosponsors on a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076/cosponsors",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076",
+						"cosponsors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of related bills to a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076/relatedbills",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076",
+						"relatedbills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of legislative subjects on a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076/subjects",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076",
+						"subjects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of summaries for a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076/summaries",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076",
+						"summaries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of text versions for a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076/text",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076",
+						"text"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of titles for a specified bill.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/bill/117/hr/3076/titles",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"bill",
+						"117",
+						"hr",
+						"3076",
+						"titles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of laws filtered by the specified congress.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/law/118",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"law",
+						"118"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of laws filtered by specified congress and law type (public or private).",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/law/118/pub",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"law",
+						"118",
+						"pub"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a law filtered by specified congress, law type (public or private), and law number.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/law/117/pub/108",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"law",
+						"117",
+						"pub",
+						"108"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

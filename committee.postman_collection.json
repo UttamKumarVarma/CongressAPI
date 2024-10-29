@@ -1,0 +1,289 @@
+{
+	"info": {
+		"_postman_id": "0ccd4779-2992-4fef-a4f1-ffc34bc876b5",
+		"name": "committee",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25809818"
+	},
+	"item": [
+		{
+			"name": "Returns a list of congressional committees.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of congressional committees filtered by the specified chamber.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee/house",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee",
+						"house"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of congressional committees filtered by the specified congress",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee/117",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee",
+						"117"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of committees filtered by the specified congress and chamber.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee/117/house",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee",
+						"117",
+						"house"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns detailed information for a specified congressional committee",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee/house/hspw00",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee",
+						"house",
+						"hspw00"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of legislation associated with the specified congressional committee.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee/house/hspw00/bills",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee",
+						"house",
+						"hspw00",
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of committee reports associated with a specified congressional committee.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee/house/hspw00/reports",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee",
+						"house",
+						"hspw00",
+						"reports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of nominations associated with a specified congressional committee.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee/senate/ssas00/nominations?format=json",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee",
+						"senate",
+						"ssas00",
+						"nominations"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of House communications associated with a specified congressional committee",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee/house/hspw00/house-communication",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee",
+						"house",
+						"hspw00",
+						"house-communication"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns the list of Senate communications associated with a specified congressional committee.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/committee/senate/ssas00/senate-communication",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"committee",
+						"senate",
+						"ssas00",
+						"senate-communication"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

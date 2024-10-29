@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "29f1e4f2-50c9-4b1b-a858-a77701c6b2b7",
+		"name": "daily-congressional-record",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25809818"
+	},
+	"item": [
+		{
+			"name": "Returns a list of daily congressional record issues sorted by most recent.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/daily-congressional-record",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"daily-congressional-record"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of daily Congressional Records filtered by the specified volume number",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/daily-congressional-record/166",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"daily-congressional-record",
+						"166"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of daily Congressional Records filtered by the specified volume number and specified issue number",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/daily-congressional-record/168/153",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"daily-congressional-record",
+						"168",
+						"153"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Returns a list of daily Congressional Record articles filtered by the specified volume number and specified issue number",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.congress.gov/v3/daily-congressional-record/167/21/articles",
+					"protocol": "https",
+					"host": [
+						"api",
+						"congress",
+						"gov"
+					],
+					"path": [
+						"v3",
+						"daily-congressional-record",
+						"167",
+						"21",
+						"articles"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "XgSmUR8FSZ7xKqxSXKC99YbWvRXAtElXSjDAH5lz",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
